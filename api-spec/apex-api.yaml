@@ -1,0 +1,157 @@
+openapi: 3.0.3
+info:
+  title: ApexSure Insurance API
+  description: |
+    API for the ApexSure Insurance Digital Portal.
+    
+    This API is exposed by the WSO2 Integration layer (Ballerina) and provides
+    policy issuance capabilities by orchestrating between:
+    - Risk Assessment Service (REST)
+    - Legacy Policy Core System (SOAP)
+  version: 1.0.0
+  contact:
+    name: ApexSure API Team
+    email: api@apexsure.com
+
+servers:
+  - url: http://localhost:9090
+    description: Development server (Ballerina Integration)
+
+tags:
+  - name: Policy
+    description: Policy issuance operations
+
+paths:
+  /issue-policy:
+    post:
+      tags:
+        - Policy
+      summary: Issue a new insurance policy
+      description: |
+        Processes a policy application by:
+        1. Checking risk score via REST service
+        2. If approved, transforms request to XML and calls legacy SOAP service
+        3. Returns policy details or referral status
+      operationId: issuePolicy
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PolicyRequest'
+            examples:
+              lowRisk:
+                summary: Low risk applicant
+                value:
+                  name: "John Doe"
+                  nationalId: "1111"
+                  coverageAmount: 100000
+              highRisk:
+                summary: High risk applicant
+                value:
+                  name: "Jane Smith"
+                  nationalId: "2222"
+                  coverageAmount: 50000
+      responses:
+        '200':
+          description: Policy processed successfully
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/PolicySuccess'
+                  - $ref: '#/components/schemas/PolicyReferred'
+              examples:
+                approved:
+                  summary: Policy approved
+                  value:
+                    policyId: "POL-1704067200000-123"
+                    status: "Active"
+                    premium: 250
+                referred:
+                  summary: Application referred for review
+                  value:
+                    status: "Referred"
+                    reason: "High Risk"
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  schemas:
+    PolicyRequest:
+      type: object
+      required:
+        - name
+        - nationalId
+        - coverageAmount
+      properties:
+        name:
+          type: string
+          description: Full name of the applicant
+          example: "John Doe"
+          minLength: 2
+          maxLength: 100
+        nationalId:
+          type: string
+          description: National identification number
+          example: "1111"
+          minLength: 4
+          maxLength: 20
+        coverageAmount:
+          type: integer
+          description: Requested coverage amount in USD
+          example: 100000
+          minimum: 10000
+          maximum: 10000000
+
+    PolicySuccess:
+      type: object
+      properties:
+        policyId:
+          type: string
+          description: Unique policy identifier from legacy system
+          example: "POL-1704067200000-123"
+        status:
+          type: string
+          description: Policy status
+          enum:
+            - Active
+          example: "Active"
+        premium:
+          type: number
+          description: Monthly premium amount in USD
+          example: 250.00
+
+    PolicyReferred:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Application status
+          enum:
+            - Referred
+          example: "Referred"
+        reason:
+          type: string
+          description: Reason for referral
+          example: "High Risk"
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code
+        message:
+          type: string
+          description: Error message

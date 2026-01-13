@@ -1,0 +1,8 @@
+[package]
+org = "viggnah"
+name = "insurance"
+version = "0.1.0"
+title = "insurance"
+
+[build-options]
+sticky = true
