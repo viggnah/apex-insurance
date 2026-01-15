@@ -5,14 +5,14 @@ import ballerina/data.xmldata;
 // HTTP listener on port 9090
 listener http:Listener httpListener = check new (9090);
 
-@http:ServiceConfig {
-    cors: {
-        allowOrigins: ["*"],
-        allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-        allowHeaders: ["*", "Content-Type", "Authorization"],
-        maxAge: 3600
-    }
-}
+// @http:ServiceConfig {
+//     cors: {
+//         allowOrigins: ["*"],
+//         allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+//         allowHeaders: ["*", "Content-Type", "Authorization"],
+//         maxAge: 3600
+//     }
+// }
 service / on httpListener {
 
     resource function post policy(@http:Payload PolicyRequest request) returns PolicyResponse|ReferralResponse|error {
