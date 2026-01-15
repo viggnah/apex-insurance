@@ -22,7 +22,7 @@ tags:
     description: Policy issuance operations
 
 paths:
-  /issue-policy:
+  /policy:
     post:
       tags:
         - Policy
@@ -32,7 +32,7 @@ paths:
         1. Checking risk score via REST service
         2. If approved, transforms request to XML and calls legacy SOAP service
         3. Returns policy details or referral status
-      operationId: issuePolicy
+      operationId: policy
       requestBody:
         required: true
         content:

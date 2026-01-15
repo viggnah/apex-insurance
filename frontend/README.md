@@ -34,4 +34,4 @@ Frontend runs on `http://localhost:3000` (or 3001 if 3000 is busy)
 
 ## API Integration
 
-The frontend calls the Ballerina integration service at `http://localhost:9090/issue-policy`
+The frontend calls the Ballerina integration service at `http://localhost:9090/policy`

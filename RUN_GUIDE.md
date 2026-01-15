@@ -73,7 +73,7 @@ JInsurance/
 │   └── package.json
 │
 ├── integrator/insurance/   # Ballerina integration service
-│   ├── main.bal           # HTTP listener & /issue-policy endpoint
+│   ├── main.bal           # HTTP listener & /policy endpoint
 │   └── ...
 │
 ├── frontend/              # React + Tailwind CSS app
@@ -127,12 +127,12 @@ You can test the Ballerina integration directly:
 
 ```bash
 # Test with low-risk ID (should succeed)
-curl -X POST http://localhost:9090/issue-policy \
+curl -X POST http://localhost:9090/policy \
   -H "Content-Type: application/json" \
   -d '{"name":"John Doe","nationalId":"1111","coverageAmount":100000}'
 
 # Test with high-risk ID (should be referred)
-curl -X POST http://localhost:9090/issue-policy \
+curl -X POST http://localhost:9090/policy \
   -H "Content-Type: application/json" \
   -d '{"name":"Jane Smith","nationalId":"2222","coverageAmount":50000}'
 ```

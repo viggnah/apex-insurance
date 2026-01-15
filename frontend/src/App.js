@@ -13,8 +13,8 @@ import confetti from 'canvas-confetti';
  * 4. Success - Policy certificate with confetti
  */
 
-// Integration service URL (Ballerina on port 9090)
-const API_URL = 'http://localhost:9090';
+// Integration service URL (on port 9090)
+const API_URL = "http://localhost:9090";
 
 function App() {
   // Application states: 'dashboard' | 'wizard' | 'processing' | 'success' | 'referred'
@@ -78,8 +78,8 @@ function App() {
     const stepsPromise = simulateSteps();
 
     try {
-      // Call the Ballerina integration service
-      const response = await fetch(`${API_URL}/issue-policy`, {
+      // Call the integration service
+      const response = await fetch(`${API_URL}/policy`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

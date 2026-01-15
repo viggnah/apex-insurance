@@ -3,7 +3,7 @@
 type PolicyRequest record {
     string name;
     string nationalId;
-    decimal premium;
+    int coverageAmount;
 };
 
 type RiskResponse record {

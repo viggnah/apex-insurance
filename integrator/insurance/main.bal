@@ -5,10 +5,18 @@ import ballerina/data.xmldata;
 // HTTP listener on port 9090
 listener http:Listener httpListener = check new (9090);
 
-service /on httpListener {
+@http:ServiceConfig {
+    cors: {
+        allowOrigins: ["*"],
+        allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+        allowHeaders: ["*", "Content-Type", "Authorization"],
+        maxAge: 3600
+    }
+}
+service / on httpListener {
 
-    resource function post 'issue\-policy(@http:Payload PolicyRequest request) returns PolicyResponse|ReferralResponse|error {
-        
+    resource function post policy(@http:Payload PolicyRequest request) returns PolicyResponse|ReferralResponse|error {
+
         // Step 1: Log the request
         io:println(string `Received Request for ${request.name}`);
         
@@ -21,7 +29,8 @@ service /on httpListener {
             // High score - proceed with SOAP call
             
             // Transform JSON to XML for SOAP request
-            string soapRequestXml = string `<PolicyRequest><Name>${request.name}</Name><NationalId>${request.nationalId}</NationalId><Premium>${request.premium}</Premium></PolicyRequest>`;
+            decimal calculatedPremium = <decimal>request.coverageAmount * 0.0025;
+            string soapRequestXml = string `&lt;PolicyRequest&gt;&lt;Name&gt;${request.name}&lt;/Name&gt;&lt;NationalId&gt;${request.nationalId}&lt;/NationalId&gt;&lt;Premium&gt;${calculatedPremium}&lt;/Premium&gt;&lt;/PolicyRequest&gt;`;
             
             // Call SOAP Mock
             http:Response soapResponse = check backendClient->post("/soap/policy", soapRequestXml, headers = {
@@ -35,10 +44,11 @@ service /on httpListener {
             PolicyXml policyXml = check xmldata:parseAsType(soapResponseXml);
             
             // Step 4: Return policy response
+            decimal calculatedPremiumForResponse = <decimal>request.coverageAmount * 0.0025;
             PolicyResponse policyResponse = {
                 policyId: policyXml.Policy.Id,
                 status: policyXml.Policy.Status,
-                premium: request.premium
+                premium: calculatedPremiumForResponse
             };
             
             return policyResponse;
@@ -52,5 +62,14 @@ service /on httpListener {
             
             return referralResponse;
         }
+
+        // PolicyResponse policyResponse = {
+        //         policyId: "1111",
+        //         status: "Active",
+        //         premium: 1200.50d
+        //     };
+            
+        // return policyResponse;
     }
 }
+

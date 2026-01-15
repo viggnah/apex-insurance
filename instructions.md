@@ -41,7 +41,7 @@ Generate code for the following 4 components.
 *File: `policy_integration.bal*`
 
 * **Listener:** Port 9090.
-* **Resource:** `POST /issue-policy`.
+* **Resource:** `POST /policy`.
 * **Logic:**
 1. **Log:** Print "Received Request for {name}".
 2. **Risk Check:** Call `http://localhost:3000/risk/{nationalId}`.
@@ -57,7 +57,7 @@ Generate code for the following 4 components.
 **3. The API Definition (OpenAPI)**
 *File: `apex-api.yaml*`
 
-* Standard OpenAPI 3.0 definition for the `/issue-policy` endpoint.
+* Standard OpenAPI 3.0 definition for the `/policy` endpoint.
 
 **4. The Frontend App (React + Tailwind CSS)**
 
