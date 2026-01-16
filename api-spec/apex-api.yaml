@@ -110,8 +110,8 @@ components:
         coverageAmount:
           type: integer
           description: Requested coverage amount in USD
-          example: 100000
-          minimum: 10000
+          example: 10000
+          minimum: 10
           maximum: 10000000
 
     PolicySuccess:

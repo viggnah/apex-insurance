@@ -5,7 +5,7 @@
 
 [ballerina]
 dependencies-toml-version = "2"
-distribution-version = "2201.13.1"
+distribution-version = "2201.12.3"
 
 [[package]]
 org = "ballerina"
@@ -228,6 +228,9 @@ dependencies = [
 	{org = "ballerina", name = "lang.value"},
 	{org = "ballerina", name = "observe"}
 ]
+modules = [
+	{org = "ballerina", packageName = "log", moduleName = "log"}
+]
 
 [[package]]
 org = "ballerina"
@@ -308,13 +311,27 @@ dependencies = [
 ]
 
 [[package]]
+org = "ballerinax"
+name = "redis"
+version = "3.1.0"
+dependencies = [
+	{org = "ballerina", name = "crypto"},
+	{org = "ballerina", name = "jballerina.java"}
+]
+modules = [
+	{org = "ballerinax", packageName = "redis", moduleName = "redis"}
+]
+
+[[package]]
 org = "viggnah"
 name = "insurance"
 version = "0.1.0"
 dependencies = [
 	{org = "ballerina", name = "data.xmldata"},
 	{org = "ballerina", name = "http"},
-	{org = "ballerina", name = "io"}
+	{org = "ballerina", name = "io"},
+	{org = "ballerina", name = "log"},
+	{org = "ballerinax", name = "redis"}
 ]
 modules = [
 	{org = "viggnah", packageName = "insurance", moduleName = "insurance"}
